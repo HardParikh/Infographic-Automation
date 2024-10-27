@@ -41,11 +41,20 @@ def updating_tables():
     source_sheet_name = 'Aggregated Monthly Infographic'
     remove_trailing_zeros(source_file, source_sheet_name, column_name = 'STATISTIC')
     source_table_range = (2, 1, 55, 5)  # Range of cells (min_row, min_col, max_row, max_col)
-    target_file = '../reports/10.08.2024_Monthly Infographic_Job Aid & Templates.xlsx'
+    target_file = '../reports/10.08.2024_Monthly Infographic_Job.xlsx'
     target_sheet_name = 'reference sheet_all SDDR'
     target_start_cell = 'B7'
     replace_table(source_file, source_sheet_name, source_table_range, target_file, target_sheet_name, target_start_cell)
     
+    source_file = '../data/Monthly Infographic - Hyperlinks.xlsx'
+    source_sheet_name = 'Monthly Infographic'
+    remove_trailing_zeros(source_file, source_sheet_name, column_name = 'STATISTIC')
+    source_table_range = (2, 1, 325, 6)  # Range of cells (min_row, min_col, max_row, max_col)
+    target_file = '../reports/10.08.2024_Monthly Infographic_Job.xlsx'
+    target_sheet_name = 'reference sheet_indiv SDDR'
+    target_start_cell = 'B7'
+    replace_table(source_file, source_sheet_name, source_table_range, target_file, target_sheet_name, target_start_cell)
+    
 if __name__ == "__main__":
-    data_fetching()
+    # data_fetching()
     updating_tables()
