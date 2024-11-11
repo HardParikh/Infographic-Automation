@@ -1,5 +1,5 @@
 import os
-from utils import save_to_excel, replace_table, remove_trailing_zeros, create_folder_structure, save_selection_as_pdf, send_email, update_workbook, get_previous_month_year
+from utils import save_to_excel, replace_table, remove_trailing_zeros, create_folder_structure, save_selection_as_pdf, send_email, update_workbook, get_previous_month_year, get_personalized_query
 import shutil
 
 BASE_PATH = r"C:\Users\ParikH01\CPGPLC\E15 FLIK LENZ - E15 Channel - Analytics\Python Automation - LENZ Performance Snapshot"
@@ -10,6 +10,8 @@ def data_fetching():
     # Fetch the dynamically created folder path for the previous month
     previous_month_folder = create_folder_structure(BASE_PATH, "Hyperlink")
 
+    individual = False
+    
     # Define query files, excel files, and destination paths
     query_and_excel_files = [
         {
@@ -38,128 +40,83 @@ def data_fetching():
         },
         {
             'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_adam_salem/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_adam_salem/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_adam_salem/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_adam_salem/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_adam_salem.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_adam_salem.xlsx')
-        },
-        {
-            'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_brian_donohue/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_brian_donohue/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_brian_donohue/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_brian_donohue/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_brian_donohue.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_brian_donohue.xlsx')
-        },
-        {
-            'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_neil_gardner/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_neil_gardner/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_neil_gardner/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_neil_gardner/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_neil_gardner.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_neil_gardner.xlsx')
-        },
-        {
-            'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_peter_soguero/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_peter_soguero/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_peter_soguero/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_peter_soguero/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_peter_soguero.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_peter_soguero.xlsx')
-        },
-        {
-            'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_rick_russo/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_rick_russo/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_rick_russo/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_rick_russo/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_rick_russo.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_rick_russo.xlsx')
-        },
-        {
-            'query_files': {
-                'Failed Audits': '../queries/health_and_sanitation_audits_sari_feltman/qa_failed_audits.sql',
-                'Failed Audits-Closed Tickets': '../queries/health_and_sanitation_audits_sari_feltman/qa_failed_audits_closed_tickets.sql',
-                'Failed Audits-Critical Q Missed': '../queries/health_and_sanitation_audits_sari_feltman/qa_failed_audits_critical_missed.sql',
-                'All Audits-Open Tickets': '../queries/health_and_sanitation_audits_sari_feltman/qa_all_audits_open_tickets.sql',
-            },
-            'excel_file': '../data/QA Monthly Infographic - Hyperlinks_sari_feltman.xlsx',
-            'destination': os.path.join(previous_month_folder, 'QA Monthly Infographic - Hyperlinks_sari_feltman.xlsx')
-        },
-        {
-            'query_files': {
                 'Unit Overview': '../queries/voc_audits/voc_unit_overview.sql',
                 'AI Identified Negative Comments': '../queries/voc_audits/voc_negative_comments.sql',
             },
             'excel_file': '../data/VOC Monthly Infographic - Hyperlinks.xlsx',
             'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_adam_salem/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_adam_salem/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_adam_salem.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_adam_salem.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_brian_donohue/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_brian_donohue/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_brian_donohue.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_brian_donohue.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_neil_gardner/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_neil_gardner/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_neil_gardner.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_neil_gardner.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_peter_soguero/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_peter_soguero/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_peter_soguero.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_peter_soguero.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_rick_russo/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_rick_russo/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_rick_russo.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_rick_russo.xlsx')
-        },
-        {
-            'query_files': {
-                'Unit Overview': '../queries/voc_audits_sari_feltman/voc_unit_overview.sql',
-                'AI Identified Negative Comments': '../queries/voc_audits_sari_feltman/voc_negative_comments.sql',
-            },
-            'excel_file': '../data/VOC Monthly Infographic - Hyperlinks_sari_feltman.xlsx',
-            'destination': os.path.join(previous_month_folder, 'VOC Monthly Infographic - Hyperlinks_sari_feltman.xlsx')
         }
     ]
 
     # Loop through each set of query files and destinations
     for item in query_and_excel_files:
         # Save to the main "data" folder
-        save_to_excel(item['excel_file'], item['query_files'])
+        save_to_excel(item['excel_file'], item['query_files'], individual)
         # Save to the dynamic previous month-year folder
-        save_to_excel(item['destination'], item['query_files'])
+        save_to_excel(item['destination'], item['query_files'], individual)
+
+
+    # Define the names of individuals
+    sddr_names = ['Adam Salem', 'Brian Donohue', 'Neil Gardner', 'Peter Soguero', 'Rick Russo', 'Sari Feltman']
+
+    # Define the folder where SQL templates are stored
+    qa_query_template_folder = '../queries/health_and_sanitation_audits_individual_sddr'
+    voc_query_template_folder = '../queries/voc_audits_individual_sddr'
+
+    # QA query mappings and generation
+    qa_sheet_name_mappings = {
+        "qa_failed_audits.sql": "Failed Audits",
+        "qa_failed_audits_closed_tickets.sql": "Failed Audits-Closed Tickets",
+        "qa_failed_audits_critical_missed.sql": "Failed Audits-Critical Q Missed",
+        "qa_all_audits_open_tickets.sql": "All Audits-Open Tickets"
+    }
+
+    individual = True
+    
+    for sddr_name in sddr_names:
+        formatted_sddr_name = sddr_name.replace(" ", "_").lower()
+        
+        # Define the output paths
+        excel_file_path = f"../data/QA Monthly Infographic - Hyperlinks_{formatted_sddr_name}.xlsx"
+        destination_path = os.path.join(previous_month_folder, f"QA Monthly Infographic - Hyperlinks_{formatted_sddr_name}.xlsx")
+
+        # Dictionary to hold personalized queries for each sheet
+        query_files = {}
+        for query_file_name, sheet_name in qa_sheet_name_mappings.items():
+            query_template_file = os.path.join(qa_query_template_folder, query_file_name)
+            if os.path.exists(query_template_file):
+                personalized_query = get_personalized_query(query_template_file, sddr_name)
+                query_files[sheet_name] = personalized_query
+
+        # Save data for each query to separate sheets
+        save_to_excel(excel_file_path, query_files, individual)        # Save in data folder
+        save_to_excel(destination_path, query_files, individual)       # Save in previous month folder
+
+    # VOC query mappings and generation
+    voc_sheet_name_mappings = {
+        "voc_unit_overview.sql": "Unit Overview",
+        "voc_negative_comments.sql": "AI Identified Negative Comments"
+    }
+
+    for sddr_name in sddr_names:
+        formatted_sddr_name = sddr_name.replace(" ", "_").lower()
+        
+        # Define the output paths
+        excel_file_path = f"../data/VOC Monthly Infographic - Hyperlinks_{formatted_sddr_name}.xlsx"
+        destination_path = os.path.join(previous_month_folder, f"VOC Monthly Infographic - Hyperlinks_{formatted_sddr_name}.xlsx")
+
+        # Dictionary to hold personalized queries for each sheet
+        query_files = {}
+        for query_file_name, sheet_name in voc_sheet_name_mappings.items():
+            query_template_file = os.path.join(voc_query_template_folder, query_file_name)
+            if os.path.exists(query_template_file):
+                personalized_query = get_personalized_query(query_template_file, sddr_name)
+                query_files[sheet_name] = personalized_query
+
+        # Save data for each query to separate sheets
+        save_to_excel(excel_file_path, query_files, individual)        # Save in data folder
+        save_to_excel(destination_path, query_files, individual)       # Save in previous month folder
+
  
 
 def updating_tables():
@@ -190,7 +147,7 @@ def save_snapshot_as_pdf():
     
     excel_file = '../reports/Monthly Infographic_Job Aid & Templates.xlsx'
     sheet_name = "All SDDR"
-    selection_range = "B2:M57" 
+    selection_range = "B2:L54" 
     output_pdf = f'../snapshots/{month}_{year}_Monthly Infographic_Snapshot_All_SDDR.pdf'
 
     save_selection_as_pdf(excel_file, sheet_name, selection_range, output_pdf)

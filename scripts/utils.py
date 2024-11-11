@@ -64,15 +64,24 @@ def fetch_data(query):
 
     return df
 
-# Function to save data into an Excel file with multiple sheets
-def save_to_excel(excel_file_path, query_files):
-    os.makedirs(os.path.dirname(excel_file_path), exist_ok=True)
 
+# Function to read and replace placeholder in SQL query
+def get_personalized_query(query_template_file, name):
+    with open(query_template_file, 'r') as file:
+        query_template = file.read()
+    return query_template.replace("{SDDR_NAME}", name)
+
+# Function to save data into an Excel file with multiple sheets
+def save_to_excel(excel_file_path, query_files, individual):
+    os.makedirs(os.path.dirname(excel_file_path), exist_ok=True)
     # Initialize an Excel writer
     try:
         with pd.ExcelWriter(excel_file_path, engine='openpyxl') as writer:
             for sheet_name, query_file in query_files.items():
-                query = read_query(query_file)
+                if individual == True:
+                    query = query_file
+                else:
+                    query = read_query(query_file)
                 if query:
                     df = fetch_data(query)
                     if df.empty:
